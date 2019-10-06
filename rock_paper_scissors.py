@@ -23,7 +23,7 @@ def buildChoicesString():
             output += "or " + option + " ('quit' to quit): "
         else:
             output += option + ", "
-        return output
+    return output
 
 
 def getPlayerChoice():
