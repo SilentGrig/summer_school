@@ -93,3 +93,7 @@ def doesHandContainCard(hand, cardToFind):
         if card == cardToFind:
             return True
     return False
+
+
+def getCardValue(card):
+    
