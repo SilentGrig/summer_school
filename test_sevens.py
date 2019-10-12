@@ -37,4 +37,3 @@ testCorrectStartingPlayerReturned()
 testNoPlayerReturnedWhenNoSevenOfSpades()
 getNextPlayerReturnsNextPlayer()
 getNextPlayerReturnsIndexZeroAfterLastPlayer()
-

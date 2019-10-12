@@ -3,10 +3,11 @@ import random
 SUITS = ["D", "C", "H", "S"]
 RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "J", "Q", "K"]
 RANK_TO_VALUE = {"A": ("01", "13"), "1": "01", "2": "02", "3": "03", "4": "04",
-                 "5": "05", "6": "06", "7": "07", "8": "08", "9": "09", "J": "10",
-                 "Q": "11", "K": "12"}
-VALUE_TO_RANK = {"01": "A", "02": "2", "03": "3", "04": "4", "05": "5", "06": "6", "07": "7",
-                 "08": "8", "09": "9", "10": "J", "11": "Q", "12": "K", "13": "A"}
+                 "5": "05", "6": "06", "7": "07", "8": "08", "9": "09",
+                 "J": "10", "Q": "11", "K": "12"}
+VALUE_TO_RANK = {"01": "A", "02": "2", "03": "3", "04": "4", "05": "5",
+                 "06": "6", "07": "7", "08": "8", "09": "9", "10": "J",
+                 "11": "Q", "12": "K", "13": "A"}
 
 
 def getDeck():
@@ -67,7 +68,8 @@ def convertCardToValue(card, AceHigh=False):
     if rank != "A":
         return RANK_TO_VALUE[rank] + suit
     elif rank == "A":
-        return (RANK_TO_VALUE[rank][1] if AceHigh else RANK_TO_VALUE[rank][0]) + suit
+        return (RANK_TO_VALUE[rank][1] if AceHigh
+                else RANK_TO_VALUE[rank][0]) + suit
 
 
 def convertHandToRanks(hand):

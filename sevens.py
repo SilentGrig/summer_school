@@ -7,7 +7,8 @@ AceHigh = False
 def getNumberOfPlayers():
     numberOfPlayers = int(input("Please enter the number of players: "))
     while not numberOfPlayers >= 3:
-        numberOfPlayers = int(input("Minimum number of please is 3, please enter number of players: "))
+        numberOfPlayers = int(input(
+            "Minimum number of please is 3, please enter number of players: "))
     return numberOfPlayers
 
 
@@ -51,20 +52,25 @@ def getValidCards():
 def getNextLowerAndUpperCard(suit, cards):
     cardsToReturn = []
     lowestCard = cards[0]
-    highestCard = card[-1]
-    lowestCardValue = int(cardGame.convertCardToValue(lowestCard, AceHigh)[:2])
+    highestCard = cards[-1]
+    lowestCardValue = int(cardGame.convertCardToValue(
+        lowestCard, AceHigh
+        )[:2])
     if lowestCardValue > 1:
-        cardsToReturn.append(cardGame.convertCardToRank(str(lowestCardValue - 1) + suit))
-    highestCardValue = int(cardGame.convertCardToValue(highestCard, AceHigh)[:2])
+        cardsToReturn.append(cardGame.convertCardToRank(
+            str(lowestCardValue - 1) + suit)
+        )
+    highestCardValue = int(cardGame.convertCardToValue(
+        highestCard, AceHigh)[:2])
     if highestCardValue < 12:
         cardsToReturn.append(cardGame.convertCardToRank(
-            str(highestCardValue + 1) + suit))
+            str(highestCardValue + 1) + suit)
+        )
     return cardsToReturn
 
 
 def isValidCommand(command, hand):
     validCards = getValidCards()
-    
 
 
 def initialSetUp():
