@@ -45,6 +45,7 @@ def getValidCards():
         if len(playedCards) == 0:
             validCards.append("7" + suit)
         else:
+            validCards.append(getNextLowerAndUpperCard(suit, playedCards))
 
 
 def getNextLowerAndUpperCard(suit, cards):
@@ -53,18 +54,17 @@ def getNextLowerAndUpperCard(suit, cards):
     highestCard = card[-1]
     lowestCardValue = int(cardGame.convertCardToValue(lowestCard, AceHigh)[:2])
     if lowestCardValue > 1:
-        cardsToReturn.append(cardGame.convertCardToRank(str(lowestCardValue + 1) + suit))
+        cardsToReturn.append(cardGame.convertCardToRank(str(lowestCardValue - 1) + suit))
     highestCardValue = int(cardGame.convertCardToValue(highestCard, AceHigh)[:2])
     if highestCardValue < 12:
-
+        cardsToReturn.append(cardGame.convertCardToRank(
+            str(highestCardValue + 1) + suit))
     return cardsToReturn
 
 
-
-
-
 def isValidCommand(command, hand):
-
+    validCards = getValidCards()
+    
 
 
 def initialSetUp():
