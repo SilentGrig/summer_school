@@ -92,4 +92,5 @@ def main():
         if isGameOver(hands):
             break
 
-main()
+if __name__ == "__main__":
+    main()

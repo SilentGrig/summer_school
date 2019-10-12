@@ -96,4 +96,4 @@ def doesHandContainCard(hand, cardToFind):
 
 
 def getCardValue(card):
-    
+    return None
