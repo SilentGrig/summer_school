@@ -75,6 +75,52 @@ def test_should_return_pair_from_hand():
     assert(highest_pair == ("H8", "D8"))
 
 
+def test_should_return_empty_tuple_when_no_pair_in_hand():
+    hand = ["SJ", "H3", "HA", "D8", "C9"]
+    highest_pair = poker_score.get_highest_pair_from_hand(hand)
+    assert(highest_pair == ())
+
+
+def test_should_return_highest_pair_for_each_hand():
+    hands = [
+        ["SJ", "H8", "HK", "D2", "C8"],
+        ["C7", "H2", "DA", "C2", "S9"],
+        ["SA", "HA", "H9", "D8", "C4"],
+    ]
+    highest_pairs = poker_score.get_highest_pair_per_player(hands)
+    assert(highest_pairs == [("H8", "C8"), ("H2", "C2"), ("SA", "HA")])
+
+
+def test_should_return_highest_pair_for_each_hand_and_empty_when_no_pair():
+    hands = [
+        ["SJ", "H8", "HK", "D2", "C8"],
+        ["C7", "H2", "DA", "C3", "S9"],
+        ["SA", "HA", "H9", "D8", "C4"],
+    ]
+    highest_pairs = poker_score.get_highest_pair_per_player(hands)
+    assert(highest_pairs == [("H8", "C8"), (), ("SA", "HA")])
+
+
+def test_should_return_winning_pairs():
+    hands = [
+        ["SJ", "H8", "HK", "D2", "C8"],
+        ["C7", "H2", "DA", "C3", "S9"],
+        ["SA", "HA", "H9", "D8", "C4"],
+    ]
+    highest_pairs = poker_score.score_pair_cards(hands)
+    assert(highest_pairs == [(3, ("SA", "HA"))])
+
+
+def test_should_return_two_tied_winning_pairs():
+    hands = [
+        ["SJ", "H8", "HK", "D2", "C8"],
+        ["C7", "H2", "DA", "CA", "S9"],
+        ["SA", "HA", "H9", "D8", "C4"],
+    ]
+    highest_pairs = poker_score.score_pair_cards(hands)
+    assert(highest_pairs == [(2, ("DA", "CA")), (3, ("SA", "HA"))])
+
+
 test_should_return_higher_of_two_cards()
 test_should_return_first_card_if_same_value()
 test_should_return_highest_card_from_hand()
@@ -85,4 +131,9 @@ test_should_return_only_player_with_highest_card()
 test_should_return_two_players_with_same_high_card()
 test_should_return_hand_grouped_by_value()
 test_should_return_pair_from_hand()
+test_should_return_empty_tuple_when_no_pair_in_hand()
+test_should_return_highest_pair_for_each_hand()
+test_should_return_highest_pair_for_each_hand_and_empty_when_no_pair()
+test_should_return_winning_pairs()
+test_should_return_two_tied_winning_pairs()
 print("All passed!")
