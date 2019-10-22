@@ -50,7 +50,7 @@ def test_should_return_only_player_with_highest_card():
         ["SQ", "H5", "H9", "D8", "C2"],
     ]
     highest_cards = poker_score.score_high_card(hands)
-    assert(highest_cards == [(2, "DA")])
+    assert(highest_cards == [(1, "DA")])
 
 
 def test_should_return_two_players_with_same_high_card():
@@ -60,7 +60,7 @@ def test_should_return_two_players_with_same_high_card():
         ["SQ", "HA", "H9", "D8", "C2"],
     ]
     highest_cards = poker_score.score_high_card(hands)
-    assert(highest_cards == [(2, "DA"), (3, "HA")])
+    assert(highest_cards == [(1, "DA"), (2, "HA")])
 
 
 def test_should_return_hand_grouped_by_value():
@@ -108,7 +108,7 @@ def test_should_return_winning_pairs():
         ["SA", "HA", "H9", "D8", "C4"],
     ]
     highest_pairs = poker_score.score_pair_cards(hands)
-    assert(highest_pairs == [(3, ("SA", "HA"))])
+    assert(highest_pairs == [(2, ("SA", "HA"))])
 
 
 def test_should_return_two_tied_winning_pairs():
@@ -118,7 +118,7 @@ def test_should_return_two_tied_winning_pairs():
         ["SA", "HA", "H9", "D8", "C4"],
     ]
     highest_pairs = poker_score.score_pair_cards(hands)
-    assert(highest_pairs == [(2, ("DA", "CA")), (3, ("SA", "HA"))])
+    assert(highest_pairs == [(1, ("DA", "CA")), (2, ("SA", "HA"))])
 
 
 test_should_return_higher_of_two_cards()

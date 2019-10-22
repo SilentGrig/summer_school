@@ -32,9 +32,9 @@ def score_high_card(hands):
     winning_cards = []
     for index, card in enumerate(highest_cards):
         if not winning_cards or cardGame.getCardValue(card, ACE_HIGH) > cardGame.getCardValue(winning_cards[0][1], ACE_HIGH):
-            winning_cards = [(index + 1, card)]
+            winning_cards = [(index, card)]
         elif cardGame.getCardValue(card, ACE_HIGH) == cardGame.getCardValue(winning_cards[0][1], ACE_HIGH):
-            winning_cards.append((index + 1, card))
+            winning_cards.append((index, card))
     return winning_cards
 
 
@@ -55,7 +55,7 @@ def get_highest_pair_from_hand(hand):
     for value, cards in grouped_cards.items():
         if not len(cards) == 2:
             continue
-        if not highest_pair or value > cardGame.getCardValue(highest_pair[0]):
+        if not highest_pair or value > cardGame.getCardValue(highest_pair[0], ACE_HIGH):
             highest_pair = tuple(cards)
     return highest_pair
 
@@ -75,7 +75,17 @@ def score_pair_cards(hands):
         if not pair:
             continue
         if not winning_pairs or cardGame.getCardValue(pair[0], ACE_HIGH) > cardGame.getCardValue(winning_pairs[0][1][0], ACE_HIGH):
-            winning_pairs = [(index + 1, pair)]
+            winning_pairs = [(index, pair)]
         elif cardGame.getCardValue(pair[0], ACE_HIGH) == cardGame.getCardValue(winning_pairs[0][1][0], ACE_HIGH):
-            winning_pairs.append((index + 1, pair))
+            winning_pairs.append((index, pair))
     return winning_pairs
+
+
+def get_winning_hands(hands):
+    winning_pairs = score_pair_cards(hands)
+    print(winning_pairs)
+    if winning_pairs:
+        return winning_pairs
+
+    high_cards = score_high_card(hands)
+    return high_cards
