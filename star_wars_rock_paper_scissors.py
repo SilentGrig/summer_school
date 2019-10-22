@@ -1,21 +1,31 @@
 import random
 
-handCounter = {
+games = [{
+    "rock": "scissors",
+    "paper": "rock",
+    "scissors": "paper"
+}, {
     "Darth Vader": "Emperor",
     "Emperor": "Luke Skywalker",
-    "Luke Skywalker": "Darth Vader"
-}
-
-numberOfPlayerWins = 0
-numberOfComputerWins = 0
+    "Luke Skywalker": "Darth Vader",
+}, ]
 
 
-def getComputerChoice():
+def getGameType():
+	while True:
+		try:
+			gameType = int(input("Enter game type - 0 for standard, or 1 for starwars: "))
+			return gameType
+		except ValueError:
+			print("Please enter 0 or 1")
+
+
+def getComputerChoice(handCounter):
 	options = list(handCounter.keys())
 	return random.choice(options)
 
 
-def buildChoicesString():
+def buildChoicesString(handCounter):
 	output = "Please type "
 	options = list(handCounter.keys())
 	for index, option in enumerate(options):
@@ -26,18 +36,18 @@ def buildChoicesString():
 	return output
 
 
-def getPlayerChoice():
-	playerChoice = input(buildChoicesString())
+def getPlayerChoice(handCounter):
+	playerChoice = input(buildChoicesString(handCounter))
 	return playerChoice
 
 
-def validatePlayerChoice(choice):
+def validatePlayerChoice(choice, handCounter):
 	if choice == "quit":
 		return True
 	return choice in handCounter
 
 
-def determineWinner(playerChoice, computerChoice):
+def determineWinner(playerChoice, computerChoice,handCounter):
 	if handCounter[playerChoice] == computerChoice:
 		return "player"
 	elif handCounter[computerChoice] == playerChoice:
@@ -67,24 +77,46 @@ def pluraliseWord(word, count):
 		return word
 	return word + "s"
 
-while True:
-	computerChoice = getComputerChoice()
-	playerChoice = getPlayerChoice()
 
-	while not validatePlayerChoice(playerChoice):
-		print("Invalid input. ", end="")
-		playerChoice = getPlayerChoice()
+def playGame():
+	numberOfPlayerWins = 0
+	numberOfComputerWins = 0
 
-	if playerChoice == "quit":
-		break;
+	gameType = getGameType()
+	handCounter = games[gameType]
 
-	winner = determineWinner(playerChoice, computerChoice)
-	print("Player choice: " + playerChoice + " - Computer choice: " + computerChoice)
-	announceWinner(winner)
-	numberOfPlayerWins, numberOfComputerWins = updateScores(winner, numberOfPlayerWins, numberOfComputerWins)
+	while True:
+		print()
+		computerChoice = getComputerChoice(handCounter)
+		playerChoice = getPlayerChoice(handCounter)
 
-if numberOfPlayerWins > 0 or numberOfComputerWins > 0:
-	print("You won " + str(numberOfPlayerWins) + " " + pluraliseWord("time", numberOfPlayerWins) + " and the computer won " 
-			+ str(numberOfComputerWins) + " " + pluraliseWord("time", numberOfComputerWins) + ".")
+		while not validatePlayerChoice(playerChoice, handCounter):
+			print("Invalid input. ", end="")
+			playerChoice = getPlayerChoice(handCounter)
 
-print("Goodbye!")
+		if playerChoice == "quit":
+			break;
+
+		winner = determineWinner(playerChoice, computerChoice, handCounter)
+		print("Player choice: " + playerChoice + " - Computer choice: " + computerChoice)
+		announceWinner(winner)
+		numberOfPlayerWins, numberOfComputerWins = updateScores(winner, numberOfPlayerWins, numberOfComputerWins)
+	
+	if numberOfPlayerWins > 0 or numberOfComputerWins > 0:
+		print("You won " + str(numberOfPlayerWins) + " " + pluraliseWord("time", numberOfPlayerWins) + " and the computer won " 
+				+ str(numberOfComputerWins) + " " + pluraliseWord("time", numberOfComputerWins) + ".")
+
+
+def main():
+	playing = True
+	while playing:
+		playGame()
+		print()
+		playAgain = input("Do you want to play again? ").lower()
+		if playAgain in ["no", "n"]:
+			playing = False
+	
+	print("Goodbye!")
+
+if __name__ == "__main__":
+	main()

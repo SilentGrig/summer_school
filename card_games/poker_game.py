@@ -35,35 +35,31 @@ def buildHandsToBePlayed(hands, middle):
 
 
 def printPlayedHands(playedHands):
-    print("Player played: " + str(playedHands[PLAYER]))
+    print("Player hand: " + formatHandString(playedHands[PLAYER]))
     for i in range(1, len(playedHands)):
         hand = playedHands[i]
-        print("Computer " + str(i) + " played: " + str(hand))
+        print("Computer " + str(i) + " hand: " + formatHandString(hand))
 
 
-def printSingleWinner(winningHands):
-    winner = winningHands[0]
-    winningHand = winningHands[1]
-    if winner == PLAYER:
-        print("Player wins with: " + str(winningHand))
+def printSingleWinner(player, hand, winType):
+    if player == PLAYER:
+        print("Player wins with " + winType + " : " + formatHandString(hand))
     else:
-        print("Computer " + str(winner) + " wins with: " + str(winningHand))
+        print("Computer " + str(player) + " wins with " + winType + " : " + formatHandString(hand))
 
 
-def printTiedWinners(winningHands):
-    print("Tied game")
-    for hand in winningHands:
-        printSingleWinner(hand)
-
-
-def printWinners(winningHands, playedHands):
+def printWinners(winningHands, playedHands, winType):
     print("-" * 30)
     printPlayedHands(playedHands)
     print("-" * 30)
-    if len(winningHands) == 1:
-        printSingleWinner(winningHands[0])
-    else:
-        printTiedWinners(winningHands)
+    if len(winningHands) != 1:
+        print("Tied Game!")
+    for player, hand in winningHands.items():
+        printSingleWinner(player, hand, winType)
+
+
+def formatHandString(hand):
+    return ", ".join(hand)
 
 
 def main():
@@ -76,8 +72,8 @@ def main():
 
     while True:
         print()
-        print("Player Hand: " + str(playerHand))
-        print("Middle: " + str(middle))
+        print("Player Hand: " + formatHandString(playerHand))
+        print("Middle: " + formatHandString(middle))
         command = getPlayerCommand()
 
         if command == "fold":
@@ -88,8 +84,8 @@ def main():
 
         if len(middle) >= 3:
             handsToBePlayed = buildHandsToBePlayed(hands, middle)
-            winningHands = poker_score.get_winning_hands(handsToBePlayed)
-            printWinners(winningHands, handsToBePlayed)
+            winningHands, winType = poker_score.get_winning_hands(handsToBePlayed)
+            printWinners(winningHands, handsToBePlayed, winType)
             break
 
 
