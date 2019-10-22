@@ -15,6 +15,18 @@ def getPlayerCommand():
     return command
 
 
+def getNumberOfComputers():
+    while True:
+        try:
+            numberOfComputerPlayers = int(input("Please enter number of computer players: "))
+            if numberOfComputerPlayers >= 1 and numberOfComputerPlayers <= 4:
+                return numberOfComputerPlayers
+            else:
+                print("number must be between 1 and 4")
+        except ValueError:
+            print("Please give a number between 1 and 4")
+
+
 def buildHandsToBePlayed(hands, middle):
     handsToBePlayed = []
     for hand in hands:
@@ -56,7 +68,9 @@ def printWinners(winningHands, playedHands):
 
 def main():
     print("Welcome to the Game!")
-    cardGame.dealCards(deck, 2, 2, hands)
+    numberOfComputerPlayers = getNumberOfComputers()
+    numOfPlayers = numberOfComputerPlayers + 1
+    cardGame.dealCards(deck=deck, numOfCards=2, numOfPlayers=numOfPlayers, hands=hands)
     playerHand = hands[0]
     middle = []
 
