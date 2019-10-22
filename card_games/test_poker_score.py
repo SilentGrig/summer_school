@@ -71,13 +71,13 @@ def test_should_return_hand_grouped_by_value():
 
 def test_should_return_pair_from_hand():
     hand = ["SJ", "H8", "HA", "D8", "C9"]
-    highest_pair = poker_score.get_highest_pair_from_hand(hand)
+    highest_pair = poker_score.get_highest_group_from_hand(hand, 2)
     assert(highest_pair == ("H8", "D8"))
 
 
 def test_should_return_empty_tuple_when_no_pair_in_hand():
     hand = ["SJ", "H3", "HA", "D8", "C9"]
-    highest_pair = poker_score.get_highest_pair_from_hand(hand)
+    highest_pair = poker_score.get_highest_group_from_hand(hand, 2)
     assert(highest_pair == ())
 
 
@@ -87,7 +87,7 @@ def test_should_return_highest_pair_for_each_hand():
         ["C7", "H2", "DA", "C2", "S9"],
         ["SA", "HA", "H9", "D8", "C4"],
     ]
-    highest_pairs = poker_score.get_highest_pair_per_player(hands)
+    highest_pairs = poker_score.get_highest_group_per_player(hands, 2)
     assert(highest_pairs == [("H8", "C8"), ("H2", "C2"), ("SA", "HA")])
 
 
@@ -97,7 +97,7 @@ def test_should_return_highest_pair_for_each_hand_and_empty_when_no_pair():
         ["C7", "H2", "DA", "C3", "S9"],
         ["SA", "HA", "H9", "D8", "C4"],
     ]
-    highest_pairs = poker_score.get_highest_pair_per_player(hands)
+    highest_pairs = poker_score.get_highest_group_per_player(hands, 2)
     assert(highest_pairs == [("H8", "C8"), (), ("SA", "HA")])
 
 
@@ -107,7 +107,7 @@ def test_should_return_winning_pairs():
         ["C7", "H2", "DA", "C3", "S9"],
         ["SA", "HA", "H9", "D8", "C4"],
     ]
-    highest_pairs = poker_score.score_pair_cards(hands)
+    highest_pairs = poker_score.score_group_cards(hands, 2)
     assert(highest_pairs == {2: ("SA", "HA")})
 
 
@@ -117,7 +117,7 @@ def test_should_return_two_tied_winning_pairs():
         ["C7", "H2", "DA", "CA", "S9"],
         ["SA", "HA", "H9", "D8", "C4"],
     ]
-    highest_pairs = poker_score.score_pair_cards(hands)
+    highest_pairs = poker_score.score_group_cards(hands, 2)
     assert(highest_pairs == {1: ("DA", "CA"), 2: ("SA", "HA")})
 
 
@@ -142,6 +142,42 @@ def test_should_return_kicker_card_on_pair_tie():
     assert(winning_cards == ({1: ("DA", "CA", "S9"), 2: ("SA", "HA", "H9")}, "one pair with kicker"))
 
 
+def test_should_return_three_of_a_kind_from_hand():
+    hand = ["SJ", "H8", "HA", "D8", "C8"]
+    highest_triple = poker_score.get_highest_group_from_hand(hand, 3)
+    assert(highest_triple == ("H8", "D8", "C8"))
+
+
+def test_should_return_highest_three_of_a_kind_for_each_hand():
+    hands = [
+        ["SJ", "H8", "HK", "D8", "C8"],
+        ["C7", "H2", "DA", "C2", "S9"],
+        ["SA", "HA", "H9", "D8", "C4"],
+    ]
+    highest_triples = poker_score.get_highest_group_per_player(hands, 3)
+    assert(highest_triples == [("H8", "D8", "C8"), (), ()])
+
+
+def test_should_return_winning_three_of_a_kinds():
+    hands = [
+        ["SJ", "H8", "HK", "D2", "C8"],
+        ["C7", "H2", "D8", "C3", "S9"],
+        ["SA", "HA", "H9", "DA", "C4"],
+    ]
+    highest_triples = poker_score.score_group_cards(hands, 3)
+    assert(highest_triples == {2: ("SA", "HA", "DA")})
+
+
+def test_should_return_kicker_card_on_three_of_a_kind_tie():
+    hands = [
+        ["SJ", "H8", "HK", "D2", "C8"],
+        ["C7", "HA", "DA", "CA", "S9"],
+        ["SA", "HA", "DA", "D8", "C4"],
+    ]
+    winning_cards = poker_score.get_winning_hands(hands)
+    assert(winning_cards == ({1: ("HA", "DA", "CA", "S9")}, "three of a kind with kicker"))
+
+
 test_should_return_higher_of_two_cards()
 test_should_return_first_card_if_same_value()
 test_should_return_highest_card_from_hand()
@@ -159,4 +195,8 @@ test_should_return_winning_pairs()
 test_should_return_two_tied_winning_pairs()
 test_should_remove_used_cards()
 test_should_return_kicker_card_on_pair_tie()
+test_should_return_three_of_a_kind_from_hand()
+test_should_return_highest_three_of_a_kind_for_each_hand()
+test_should_return_winning_three_of_a_kinds()
+test_should_return_kicker_card_on_three_of_a_kind_tie()
 print("All passed!")
