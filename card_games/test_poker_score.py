@@ -17,20 +17,20 @@ def test_should_return_first_card_if_same_value():
 
 def test_should_return_highest_card_from_hand():
     hand = ["SJ", "H8", "HA", "D2", "C9"]
-    highest_card = poker_score.get_highest_card_from_hand(hand)
-    assert(highest_card == "HA")
+    highest_card = poker_score.get_highest_group_from_hand(hand, 1)
+    assert(highest_card == ("HA",))
 
 
-def test_should_return_highest_card_when_tied_highest_value_in_hand():
+def test_should_return_next_highest_card_when_tied_highest_value_in_hand():
     hand = ["SJ", "H8", "HJ", "D2", "C9"]
-    highest_card = poker_score.get_highest_card_from_hand(hand)
-    assert(highest_card == "SJ" or highest_card == "HJ")
+    highest_card = poker_score.get_highest_group_from_hand(hand, 1)
+    assert(highest_card == ("C9",))
 
 
 def test_should_return_highest_card_from_single_hand():
     hands = [["SJ", "H8", "HK", "D2", "C9"]]
-    hands_highest_cards = poker_score.get_highest_card_for_each_player(hands)
-    assert(hands_highest_cards[0] == "HK")
+    hands_highest_cards = poker_score.get_highest_group_per_player(hands, 1)
+    assert(hands_highest_cards[0] == ("HK",))
 
 
 def test_should_return_highest_card_for_multiple_hands():
@@ -39,8 +39,8 @@ def test_should_return_highest_card_for_multiple_hands():
         ["C7", "H2", "DA", "C2", "S9"],
         ["SQ", "H5", "H9", "D8", "C2"],
     ]
-    hands_highest_cards = poker_score.get_highest_card_for_each_player(hands)
-    assert(hands_highest_cards == ["HK", "DA", "SQ"])
+    hands_highest_cards = poker_score.get_highest_group_per_player(hands, 1)
+    assert(hands_highest_cards == [("HK",), ("DA",), ("SQ",)])
 
 
 def test_should_return_only_player_with_highest_card():
@@ -49,7 +49,7 @@ def test_should_return_only_player_with_highest_card():
         ["C7", "H2", "DA", "C2", "S9"],
         ["SQ", "H5", "H9", "D8", "C2"],
     ]
-    highest_cards = poker_score.score_high_card(hands)
+    highest_cards = poker_score.score_group_cards(hands, 1)
     assert(highest_cards == {1: ("DA",)})
 
 
@@ -59,7 +59,7 @@ def test_should_return_two_players_with_same_high_card():
         ["C7", "H2", "DA", "C2", "S9"],
         ["SQ", "HA", "H9", "D8", "C2"],
     ]
-    highest_cards = poker_score.score_high_card(hands)
+    highest_cards = poker_score.score_group_cards(hands, 1)
     assert(highest_cards == {1: ("DA",), 2: ("HA",)})
 
 
@@ -178,10 +178,29 @@ def test_should_return_kicker_card_on_three_of_a_kind_tie():
     assert(winning_cards == ({1: ("HA", "DA", "CA", "S9")}, "three of a kind with kicker"))
 
 
+def test_should_return_kicker_card_on_high_card_tie():
+    hands = [
+        ["SJ", "H8", "HK", "D2", "C4"],
+        ["C7", "H3", "DA", "C8", "S9"],
+        ["SA", "HJ", "DQ", "D8", "C4"],
+    ]
+    winning_cards = poker_score.get_winning_hands(hands)
+    assert(winning_cards == ({2: ("SA", "DQ")}, "high card with kicker"))
+
+
+def test_should_return_kicker_cards_on_four_high_card_ties():
+    hands = [
+        ["SA", "HK", "HQ", "DJ", "C10"],
+        ["CA", "HK", "DQ", "CJ", "S9"],
+    ]
+    winning_cards = poker_score.get_winning_hands(hands)
+    assert(winning_cards == ({0: ("SA", "HK", "HQ", "DJ", "C10")}, "high card with kicker"))
+
+
 test_should_return_higher_of_two_cards()
 test_should_return_first_card_if_same_value()
 test_should_return_highest_card_from_hand()
-test_should_return_highest_card_when_tied_highest_value_in_hand()
+test_should_return_next_highest_card_when_tied_highest_value_in_hand()
 test_should_return_highest_card_from_single_hand()
 test_should_return_highest_card_for_multiple_hands()
 test_should_return_only_player_with_highest_card()
@@ -199,4 +218,6 @@ test_should_return_three_of_a_kind_from_hand()
 test_should_return_highest_three_of_a_kind_for_each_hand()
 test_should_return_winning_three_of_a_kinds()
 test_should_return_kicker_card_on_three_of_a_kind_tie()
+test_should_return_kicker_card_on_high_card_tie()
+test_should_return_kicker_cards_on_four_high_card_ties()
 print("All passed!")

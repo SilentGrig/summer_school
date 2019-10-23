@@ -9,37 +9,6 @@ def get_higher_card(card_one, card_two):
     return card_one if card_one_value >= card_two_value else card_two
 
 
-def get_highest_card_from_hand(hand):
-    highest_card = None
-    for card in hand:
-        if not highest_card:
-            highest_card = card
-        else:
-            highest_card = get_higher_card(highest_card, card)
-    return highest_card
-
-
-def get_highest_card_for_each_player(hands):
-    highest_cards = []
-    for hand in hands:
-        highest_card_this_hand = get_highest_card_from_hand(hand)
-        highest_cards.append(highest_card_this_hand)
-    return highest_cards
-
-
-def score_high_card(hands):
-    highest_cards = get_highest_card_for_each_player(hands)
-    winning_cards = {}
-    for index, card in enumerate(highest_cards):
-        if not card:
-            continue
-        if not winning_cards or cardGame.getCardValue(card, ACE_HIGH) > cardGame.getCardValue(list(winning_cards.values())[0][0], ACE_HIGH):
-            winning_cards = dict([(index, (card,))])
-        elif cardGame.getCardValue(card, ACE_HIGH) == cardGame.getCardValue(list(winning_cards.values())[0][0], ACE_HIGH):
-            winning_cards[index] = (card, )
-    return winning_cards
-
-
 def get_cards_grouped_by_value(hand):
     card_groups = {}
     for card in hand:
@@ -84,12 +53,14 @@ def score_group_cards(hands, groupSize):
 
 
 def get_kicker_winners(hands, usedCards):
+    if len(usedCards) == 1 or not hands[0]:
+        return usedCards
     updatedHands = handsRemovingUsedAndFoldedPlayers(hands, usedCards)
-    kicker_cards = score_high_card(updatedHands)  # returns highest remaining high card
+    kicker_cards = score_group_cards(updatedHands, 1)  # returns highest remaining high card
     winning_cards = {}
     for player, kicker_card in kicker_cards.items():
         winning_cards[player] = usedCards[player] + kicker_card
-    return winning_cards
+    return get_kicker_winners(updatedHands, winning_cards)
 
 
 def get_second_pairs(hands, usedCards):
@@ -123,8 +94,14 @@ def get_triples(hands):
         if len(winning_triples) == 1:  # if only one player has pair they win
             return (winning_triples, "three of a kind")
         # if more than one player with three of a kind then determine winner(s) on remaining kicker
-        # this should only happen with multiple decks
         return (get_kicker_winners(hands, winning_triples), "three of a kind with kicker")
+
+
+def get_high_cards(hands):
+    high_cards = score_group_cards(hands, 1)
+    if len(high_cards) == 1:
+        return (high_cards, "high card")
+    return (get_kicker_winners(hands, high_cards), "high card with kicker")
 
 
 def get_winning_hands(hands):
@@ -139,7 +116,7 @@ def get_winning_hands(hands):
         return pairs
 
     # checking high card if no other
-    return (score_high_card(hands), "high card")
+    return get_high_cards(hands)
 
 
 def handsRemovingUsedAndFoldedPlayers(hands, usedCards):
