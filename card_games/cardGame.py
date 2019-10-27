@@ -116,18 +116,18 @@ def convertCardToRank(card):
     return suit + VALUE_TO_RANK[value]
 
 
-def sortHandByRank(hand):
+def sortHandByRank(hand, aceHigh=False):
     """ Sort a hand in place, sorted by rank
         Doesn't Return """
-    convertHandToValues(hand)
+    convertHandToValues(hand, aceHigh)
     hand.sort(key=lambda card: card[1:])
     convertHandToRanks(hand)
 
 
-def sortHandBySuitThenRank(hand):
+def sortHandBySuitThenRank(hand, aceHigh=False):
     """ Sort a hand in place, sorted by suit then rank
         Doesn't Return """
-    convertHandToValues(hand)
+    convertHandToValues(hand, aceHigh)
     hand.sort()
     convertHandToRanks(hand)
 
@@ -146,3 +146,17 @@ def getCardValue(card, aceHigh):
         Returns int """
     cardAsValue = convertCardToValue(card, aceHigh)
     return int(cardAsValue[1:])
+
+
+def doesHandContainValue(hand, valueToFind, aceHigh=False):
+    """ Determines if a card with a certain value is found in hand
+        Returns True or False """
+    for card in hand:
+        cardValue = getCardValue(card, aceHigh)
+        if cardValue == valueToFind:
+            return True
+    return False
+
+
+def getCardSuit(card):
+    return card[0]
