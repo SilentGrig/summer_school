@@ -3,10 +3,6 @@ import cardGame
 
 PLAYER = 0
 
-deck = cardGame.getDeck()
-cardGame.shuffleDeck(deck)
-hands = []
-
 
 def getPlayerCommand():
     command = input("Enter a command - 'check' or 'fold' to quit: ")
@@ -66,6 +62,9 @@ def main():
     print("Welcome to the Game!")
     numberOfComputerPlayers = getNumberOfComputers()
     numOfPlayers = numberOfComputerPlayers + 1
+    deck = cardGame.getDeck()
+    cardGame.shuffleDeck(deck)
+    hands = []
     cardGame.dealCards(deck=deck, numOfCards=2, numOfPlayers=numOfPlayers, hands=hands)
     playerHand = hands[0]
     middle = []

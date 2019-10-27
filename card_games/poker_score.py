@@ -83,7 +83,7 @@ def get_second_pairs(hands, usedCards):
     if not second_pair_cards:
         return None
     winning_cards = {}
-    for player, kicker_card in kicker_cards.items():
+    for player, kicker_card in second_pair_cards.items():
         winning_cards[player] = usedCards[player] + kicker_card
     return winning_cards
 
@@ -207,7 +207,43 @@ def get_four_of_a_kinds(hands):
     return None
 
 
+def get_straight_flush_from_hand(hand):
+    is_flush = get_flush_from_hand(hand)
+    if not is_flush:
+        return None
+    return get_straight_from_hand(hand)
+
+
+def get_straight_flushes(hands):
+    return get_matching_hands(hands, get_straight_flush_from_hand, "straight flush")
+
+
+def get_royal_flush_from_hand(hand):
+    straight_flush = get_straight_flush_from_hand(hand)
+    if not straight_flush:
+        return None
+    # check straight flush contains Ace and King
+    if not (cardGame.doesHandContainValue(hand, 14, ACE_HIGH)
+            and cardGame.doesHandContainValue(hand, 13)):
+        return None
+    return straight_flush
+
+
+def get_royal_flushes(hands):
+    return get_matching_hands(hands, get_royal_flush_from_hand, "royal flush")
+
+
 def get_winning_hands(hands):
+    # checking for royal flush
+    royal_flushes = get_royal_flushes(hands)
+    if royal_flushes:
+        return royal_flushes
+
+    # checking for straight flush
+    straight_flushes = get_straight_flushes(hands)
+    if straight_flushes:
+        return straight_flushes
+
     # checking four of a kind
     four_of_a_kinds = get_four_of_a_kinds(hands)
     if four_of_a_kinds:

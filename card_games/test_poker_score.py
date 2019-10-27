@@ -142,6 +142,16 @@ def test_should_return_kicker_card_on_pair_tie():
     assert(winning_cards == ({1: ("DA", "CA", "S9"), 2: ("SA", "HA", "H9")}, "one pair with kicker"))
 
 
+def test_should_return_kicker_winner_on_second_pair_tie():
+    hands = [
+        ["SJ", "H8", "HK", "D2", "C8"],
+        ["CJ", "H5", "DA", "CA", "SJ"],
+        ["SA", "HA", "H4", "DJ", "CJ"],
+    ]
+    winning_cards = poker_score.get_winning_hands(hands)
+    assert(winning_cards == ({1: ("DA", "CA", "CJ", "SJ", "H5")}, "two pairs with kicker"))
+
+
 def test_should_return_three_of_a_kind_from_hand():
     hand = ["SJ", "H8", "HA", "D8", "C8"]
     highest_triple = poker_score.get_highest_group_from_hand(hand, 3)
@@ -264,12 +274,12 @@ def test_should_return_tied_flushes():
     hands = [
         ["SJ", "S8", "SK", "S2", "S4"],
         ["C7", "H3", "DA", "C8", "S9"],
-        ["HA", "HJ", "HQ", "HK", "H10"],
+        ["HA", "H3", "HQ", "HK", "H10"],
     ]
     flush_hands = poker_score.get_winning_hands(hands)
     assert(flush_hands == ({
         0: ("SJ", "S8", "SK", "S2", "S4"),
-        2: ("HA", "HJ", "HQ", "HK", "H10")
+        2: ("HA", "H3", "HQ", "HK", "H10")
     }, "flush"))
 
 
@@ -335,6 +345,41 @@ def test_should_return_tied_four_a_kind():
     }, "four of a kind with kicker"))
 
 
+def test_should_return_straight_flush_from_hand():
+    hand = ["SJ", "S9", "S8", "SQ", "S10"]
+    straight_flush_hand = poker_score.get_straight_flush_from_hand(hand)
+    assert(straight_flush_hand == ("S8", "S9", "S10", "SJ", "SQ"))
+
+
+def test_should_return_straight_flush_from_players():
+    hands = [
+        ["SJ", "HJ", "S2", "CJ", "H2"],
+        ["SJ", "S9", "S8", "SQ", "S10"],
+        ["HA", "CA", "C7", "SA", "DA"],
+    ]
+    straight_flush_hands = poker_score.get_winning_hands(hands)
+    assert(straight_flush_hands == ({
+        1: ("S8", "S9", "S10", "SJ", "SQ")
+    }, "straight flush"))
+
+
+def test_should_return_royal_flush_from_hand():
+    hand = ["SJ", "SK", "SA", "SQ", "S10"]
+    royal_flush_hand = poker_score.get_royal_flush_from_hand(hand)
+    assert(royal_flush_hand == ("S10", "SJ", "SQ", "SK", "SA"))
+
+
+def test_should_return_royal_flush_from_players():
+    hands = [
+        ["SJ", "S9", "SK", "SQ", "S10"],
+        ["SJ", "SA", "SK", "SQ", "S10"],
+        ["HA", "CA", "C7", "SA", "DA"],
+    ]
+    royal_flush_hands = poker_score.get_winning_hands(hands)
+    assert(royal_flush_hands == ({
+        1: ("S10", "SJ", "SQ", "SK", "SA")
+    }, "royal flush"))
+
 test_should_return_higher_of_two_cards()
 test_should_return_first_card_if_same_value()
 test_should_return_highest_card_from_hand()
@@ -352,6 +397,7 @@ test_should_return_winning_pairs()
 test_should_return_two_tied_winning_pairs()
 test_should_remove_used_cards()
 test_should_return_kicker_card_on_pair_tie()
+test_should_return_kicker_winner_on_second_pair_tie()
 test_should_return_three_of_a_kind_from_hand()
 test_should_return_highest_three_of_a_kind_for_each_hand()
 test_should_return_winning_three_of_a_kinds()
@@ -373,4 +419,8 @@ test_should_return_four_of_a_kind_from_hand()
 test_should_return_four_of_a_kind_from_players()
 test_should_return_four_of_a_kind_with_kicker_from_players()
 test_should_return_tied_four_a_kind()
+test_should_return_straight_flush_from_hand()
+test_should_return_straight_flush_from_players()
+test_should_return_royal_flush_from_hand()
+test_should_return_royal_flush_from_players()
 print("All passed!")
